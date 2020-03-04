@@ -1,6 +1,6 @@
 /****************************************************
  applyWeightFile.C                                
- Stephanie Kwan + based on                        
+Adriana Dropulic and Stephanie Kwan + based on                        
  https://root.cern.ch/doc/v610/TMVAClassificationApplication_8C.html
  
  Usage:  % root -l -b -q applyWeightFile.C 
@@ -52,23 +52,20 @@ void applyWeightFile()
       used.
    */
 
-   Float_t recoTk1IP_uint;
-   Float_t recoTk2IP_uint;
-   Float_t recoTk3IP_uint;
-   Float_t recoTk4IP_uint;
-   Float_t muPt;
-   Float_t muEta;
-   Float_t muSIP2D;
+   Double_t l1Pt_1;
+   Double_t l1Pt_2;
+   Double_t l1DeltaEta;
+   Double_t l1DeltaPhi;
+   Double_1 l1Mass;
 
-   reader->AddVariable("recoTk1IP_uint", &recoTk1IP_uint);
-   reader->AddVariable("recoTk2IP_uint", &recoTk2IP_uint);
-   reader->AddVariable("recoTk3IP_uint", &recoTk3IP_uint);
-   reader->AddVariable("recoTk4IP_uint", &recoTk4IP_uint);
-   //reader->AddVariable("muPt", &muPt);
-   //reader->AddVariable("muEta", &muEta);
-   //reader->AddVariable("muSIP2D", &muSIP2D);
+   reader->AddVariable("l1Pt_1", &l1Pt_1);
+   reader->AddVariable("l1Pt_2", &l1Pt_2);
+   reader->AddVariable("l1DeltaEta", &l1DeltaEta);
+   reader->AddVariable("l1DeltaPhi", &l1DeltaPhi;
+   reader->AddVariable("l1Mass",    &l1Mass;
 
 
+   //TO DO: Make sure this is only evaluating BDT and MLP_2 weights.xml files
    /* Book the MVA methods. */
    for (std::map<std::string,int>::iterator it = Use.begin(); it != Use.end(); it++) {
       if (it->second)
@@ -86,7 +83,8 @@ void applyWeightFile()
    hist["MLP"] = new TH1F("MVA_MLP", "MVA_MLP", nbin, -1.25, 1.25);
 
    /* Prepare input tree. */
-   TString fname = TString("/afs/cern.ch/work/s/skkwan/public/triggerDevel/CMSSW_10_1_5/src/L1Trigger/phase2L1BTagAnalyzer/test/analyzer_ZTT_backup.root");
+   TString fname = TString("/afs/cern.ch/work/a/addropul/ZeroBias_all.root");
+   //TO DO: I don't currently have a tree to run the test on? Going to input training tree for now. 
    std::cout << "--- TMVAClassificationApp    : Accessing " << fname << "!" << std::endl;
    TFile *input = TFile::Open(fname);
    if (!input)
@@ -97,16 +95,14 @@ void applyWeightFile()
    /********************************************/
    /* Event loop: prepare the tree   */
 
-   TTree* theTree = (TTree*) input->Get("L1BTagAnalyzer/efficiencyTree");
+   TTree* theTree = (TTree*) input->Get("l1NtupleProducer/Stage3Regions/efficiencyTree");
+  //TO DO : Not sure what tree this should be?
    std::cout << "--- Use signal sample for evalution" << std::endl;
-   theTree->SetBranchAddress("recoTk1IP", &recoTk1IP_uint);
-   theTree->SetBranchAddress("recoTk2IP", &recoTk2IP_uint);
-   theTree->SetBranchAddress("recoTk3IP", &recoTk3IP_uint);
-   theTree->SetBranchAddress("recoTk4IP", &recoTk4IP_uint);
-
-   // theTree->SetBranchAddress("muPt", &muPt);
-   // theTree->SetBranchAddress("muEta", &muEta);
-   // theTree->SetBranchAddress("muSIP2D",  &muSIP2D);
+   theTree->SetBranchAddress("l1Pt_1", &l1Pt_1);
+   theTree->SetBranchAddress("l1Pt_2", &l1Pt_2);
+   theTree->SetBranchAddress("l1DetaEta", &l1DeltaEta);
+   theTree->SetBranchAddress("l1DeltaPhi", &l1DeltaPhi);
+   theTree->SetBranchAddress("l1Mass", &l1Mass);
 
    std::cout << "--- Processing: " << theTree->GetEntries() << " events" << std::endl;
    TStopwatch sw;
@@ -126,7 +122,7 @@ void applyWeightFile()
    std::cout << "--- End of event loop: "; sw.Print();
 
    /* Write histograms */
-   TFile *target  = new TFile( "applyWeightFile_trainOnTTbar_evalOnZTT.root", "RECREATE" );
+   TFile *target  = new TFile( "applyWeightFile_trainOnZB_evalOnHtt.root", "RECREATE" );
    for (std::map<std::string,int>::iterator it = Use.begin(); it != Use.end(); it++)
       if (it->second) hist[it->first]->Write();
 

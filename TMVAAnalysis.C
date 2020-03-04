@@ -56,7 +56,7 @@ void TMVAAnalysis()
 	
 	// Boosted Decision Trees
 	Use["BDT"] = 1;  // uses Adaptive Boost
-	Use["DNN"] = 1;
+	//Use["DNN"] = 1;
 	//--------------------------------------------
 	// Load data
 	//--------------------------------------------
@@ -64,13 +64,13 @@ void TMVAAnalysis()
 	//TString key = "5";
 	//TString inputFilename_VBF = dir + "l1TNtuple-VBF-large.root";
 	TString inputFilename_VBF = "/afs/cern.ch/work/o/ojalvo/public/forAdriana/VBF-Htt.root";
-	TString inputFilename_ZB = "/afs/cern.ch/work/a/addropul/l1TNtuple-DY.root";
+	TString inputFilename_ZB = "/afs/cern.ch/work/a/addropul/ZeroBias_all.root";
 	//TString inputFilename_ZB =  "/afs/cern.ch/work/a/addropul/ZeroBias_all.root";
 	//TString inputFilename_ZB =  "/afs/cern.ch/work/o/ojalvo/public/forAdriana/ZeroBiasLarge.root";
 	// Get input file and declare output file where TMVA will store ntuples, hists, etc.
 	TFile *inputFile_VBF = new TFile(inputFilename_VBF.Data());
 	TFile *inputFile_ZB = new TFile(inputFilename_ZB.Data());
-	TString outputFilename = "TMVA_output_DY_newsig.root";
+	TString outputFilename = "TMVA_output_ZB_newsig.root";
 	TFile *outFile = new TFile(outputFilename, "RECREATE");
 	
 	// Get input tree
@@ -159,11 +159,11 @@ void TMVAAnalysis()
 	// "3*var1/var2*abs(var3)". [All types of expressions that can also be
 	// parsed by TTree::Draw( "expression" )]
 
-	dataloader->AddVariable("l1Pt_1", 'D');
-	dataloader->AddVariable("l1Pt_2", 'D');
-	dataloader->AddVariable("l1DeltaEta", 'D');
-	dataloader->AddVariable("l1DeltaPhi", 'D');
-	dataloader->AddVariable("l1Mass",    'D');
+	dataloader->AddVariable("l1Pt_1", 'F');
+	dataloader->AddVariable("l1Pt_2", 'F');
+	dataloader->AddVariable("l1DeltaEta", 'F');
+	dataloader->AddVariable("l1DeltaPhi", 'F');
+	dataloader->AddVariable("l1Mass",    'F');
 
 	// You can add an arbitrary number of signal or background trees
 	// Here we set the global event weights per tree to 1.0
