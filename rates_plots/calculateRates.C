@@ -118,7 +118,7 @@ TH1F* calculateRates(TString isoHistPath,
   ratesHist->Scale((double) 1.00 / firstBin);
   //ratesHist->Scale((double) 1.00 / nEvents);
   /* kHz */
-  ratesHist->Scale(40.0 * 100000.0 / 1000.0 + 6000);
+  ratesHist->Scale(40.0 * 100000.0 / 1000.0);
 
   return ratesHist;
 }
