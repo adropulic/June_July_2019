@@ -51,14 +51,19 @@ TH1F* calculateRates(TString isoHistPath,
       std::cout<<"ERROR FILE "<< rootFileDirectory <<" NOT FOUND; EXITING"<<std::endl;
       return 0;
     }
+//  TFile *file_1 = new TFile(rootFileDirectoryAll);
+//  if (!file_1->IsOpen() || file_1==0 )
+//    { 
+//      std::cout<<"ERROR FILE "<< rootFileDirectoryAll <<" NOT FOUND; EXITING"<<std::endl;
+//      return 0;
+//    }
   
-  TH1F* allHist = (TH1F*)file->Get(allHistPath);
-  if (allHist == 0)
-    {
-      std::cout<<"ERROR: "<< allHistPath << " NOT FOUND; EXITING"<<std::endl;
-      return 0;
-    }
-
+//  TH1F* allHist = (TH1F*)file_1->Get(allHistPath);
+//  if (allHist == 0)
+//    {
+//      std::cout<<"ERROR: "<< allHistPath << " NOT FOUND; EXITING"<<std::endl;
+//      return 0;
+//    }
   TH1F* isoHist = (TH1F*)file->Get(isoHistPath);
   if (isoHist == 0)
     {
@@ -66,9 +71,25 @@ TH1F* calculateRates(TString isoHistPath,
       return 0;
     }
 
-
+//  TH1F* isoHist;
+//  if (strcmp(isoHistPath,allHistPath)!=0){
+//    isoHist = (TH1F*)file->Get(isoHistPath);
+//    if (isoHist == 0)
+//      {
+//        std::cout << "ERROR: " << isoHistPath << " not found; EXITING"<<std::endl;
+//        return 0;
+//      }
+//  }
+//  if (strcmp(isoHistPath,allHistPath)==0){
+//        isoHist = (TH1F*)file_1->Get(isoHistPath);
+//    if (isoHist == 0)
+//      {
+//        std::cout << "ERROR: " << isoHistPath << " not found; EXITING"<<std::endl;
+//        return 0;
+//      }
+//  }
   int nBins = isoHist->GetSize();
-
+  std::cout << "nBins: " << nBins <<std::endl;
   float xMin = isoHist->GetBinLowEdge(0);
   float xMax = (isoHist->GetBinLowEdge(nBins) + isoHist->GetBinWidth(nBins));
 
@@ -78,24 +99,26 @@ TH1F* calculateRates(TString isoHistPath,
   ratesHist->Sumw2();
 
   /* Loop through bins in the Rates histogram, in reverse order. */
-  int Sum;
-
+  int Sum=0;
+  //std::cout << "Sum init: " << Sum <<std::endl;
   for (int i = nBins; i > 0; i--)
     {
       Sum += isoHist->GetBinContent(i);
+      //std::cout << "Sum: " << Sum << " hist: "<<isoHistPath<<std::endl;
       ratesHist->SetBinContent(i, Sum);
     }
 
   /* Calculate (# of all events passing the BDT) / (# all events) */
   double nPass = isoHist->GetEntries();
-  double nEvents = getEvents(rootFileDirectory, "L1TauAnalyzerRates");
-
+  double nEvents = getEvents(rootFileDirectory, "l1NtupleProducer/Stage3Regions");
+  std::cout << "nEvents: " << nEvents <<std::endl;
   /* Convert each bin to a fraction of total events. */
   float firstBin = ratesHist->GetBinContent(1);
+  std::cout << "total entries: " << firstBin <<std::endl;
   ratesHist->Scale((double) 1.00 / firstBin);
-  
+  //ratesHist->Scale((double) 1.00 / nEvents);
   /* kHz */
-  ratesHist->Scale(40.0 * 1000000.0 / 1000.0);
+  ratesHist->Scale(40.0 * 100000.0 / 1000.0 + 6000);
 
   return ratesHist;
 }

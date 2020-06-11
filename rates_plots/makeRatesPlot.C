@@ -11,9 +11,7 @@
 
 void plotHists(TH1F* h1, TString h1Label, 
 	       TH1F* h2, TString h2Label,
-	       TH1F* h3, TString h3Label,
-	       TString filename,
-               TString outputDir);
+	       TH1F* h3, TString h3Label, TH1F* h4, TString h4Label, TH1F* h5, TString h5Label);
 
 void plotFiveRates(TH1F* h1, TString h1Label, int c1,
 		   TH1F* h2, TString h2Label, int c2,
@@ -35,41 +33,44 @@ void makeRatesPlot(void)
   gROOT->ProcessLine(".L calculateRates.C");
 
   /* Specify paths/directories for input files. */
-  TString rootFileDirectory = "../ntuples/newTauZL1PtCut10/SingleNeutrino-200PU.root";
+  TString rootFileDirectory = "/afs/cern.ch/user/a/addropul/CMSSW_10_6_0_pre4/src/L1Trigger/Run3Ntuplizer/test/l1TNtuple-ZeroBias-060320_restrictedeta.root";
   //going to use ZeroBias here instead 
-  TString outputDirectory = "plots/";
+  TString outputDirectory = "/afs/cern.ch/user/a/addropul/CMSSW_10_6_0_pre4/src/L1Trigger/Run3Ntuplizer/test/June_July_2019/rates_plots/plots";
+  //TString rootFileDirectoryAll = "/afs/cern.ch/user/a/addropul/CMSSW_10_6_0_pre4/src/L1Trigger/Run3Ntuplizer/test/histograms_bdt.root";
 
   /*******************************************************/
   /* Rates as a function of l1Pt                         */
   /*******************************************************/
-
+  //going to have to change 1 --> 2 for subleading jet
   /* Tau rates full detector */
-  TString l1PtPath = "L1TauAnalyzerRates/l1Tau_pt";
-  TH1F* tauTight  = calculateRates("L1TauAnalyzerRates/l1TauIsoTight_pt",  l1PtPath, rootFileDirectory);
-  TH1F* tauMedium = calculateRates("L1TauAnalyzerRates/l1TauIsoMedium_pt", l1PtPath, rootFileDirectory);
-  TH1F* tauLoose  = calculateRates("L1TauAnalyzerRates/l1TauIsoLoose_pt",  l1PtPath, rootFileDirectory);
-  TH1F* tauVLoose = calculateRates("L1TauAnalyzerRates/l1TauIsoVLoose_pt", l1PtPath, rootFileDirectory);
-  TH1F* tauNoBDT  = calculateRates("L1TauAnalyzerRates/l1Tau_pt",          l1PtPath, rootFileDirectory);
+  //TString l1PtPath = "h_l1Pt_1_zb";
+  TString l1PtPath = "l1NtupleProducer/Stage3Regions/l1pt_all_1";
+  TH1F* vbfjetsMedium = calculateRates("l1NtupleProducer/Stage3Regions/l1pt_medium_1", l1PtPath, rootFileDirectory);
+  TH1F* vbfjetsTight  = calculateRates("l1NtupleProducer/Stage3Regions/l1pt_tight_1",  l1PtPath, rootFileDirectory);
+  TH1F* vbfjetsLoose  = calculateRates("l1NtupleProducer/Stage3Regions/l1pt_loose_1",  l1PtPath, rootFileDirectory);
+  TH1F* vbfjetsVLoose = calculateRates("l1NtupleProducer/Stage3Regions/l1pt_veryloose_1", l1PtPath, rootFileDirectory);
+  TH1F* vbfjetsNoBDT  = calculateRates(l1PtPath,l1PtPath,rootFileDirectory);
 
   plotFiveRates(
-		tauNoBDT, "L1 Reconstruction", kPink+7,
-		tauVLoose, "Very Loose", kTeal-8,
-		tauLoose, "Loose", kTeal-6,
-		tauMedium, "Medium", kAzure-9,
-		tauTight, "Tight", kAzure+2,
-		18.0, 60.0,
+		vbfjetsNoBDT, "L1 Reconstruction", kPink+7,
+		vbfjetsVLoose, "Very Loose (bdtDiscriminant > -.353)", kTeal-8,
+		vbfjetsLoose, "Loose (bdtDiscriminant > -.308)", kTeal-6,
+		vbfjetsMedium, "Medium (bdtDiscriminant > -.183)", kAzure-9,
+		vbfjetsTight, "Tight (bdtDiscriminant > -.003)", kAzure+2,
+		0.0, 300.0,
 		10.0, 130000,
-		"Tau Rate (Full Detector)",
-		"rates-tau-PF_200PU_deltaZ5cm_fullDetector.png",
+		"Zero Bias Rate Leading Jet",
+		"rates_fullDetector_leading_scalednevents_reta_gentest.png",
 		"plots/");
 
+#if 0
   /* Tau rates: eta < 2.4 */
   l1PtPath = "L1TauAnalyzerRates/l1Tau_pt_eta2p4";
-  TH1F* tauTight2p4 = calculateRates("L1TauAnalyzerRates/l1TauIsoTight_pt_eta2p4", l1PtPath, rootFileDirectory);
-  TH1F* tauMedium2p4 = calculateRates("L1TauAnalyzerRates/l1TauIsoMedium_pt_eta2p4", l1PtPath, rootFileDirectory);
-  TH1F* tauLoose2p4 = calculateRates("L1TauAnalyzerRates/l1TauIsoLoose_pt_eta2p4", l1PtPath, rootFileDirectory);
-  TH1F* tauVLoose2p4 = calculateRates("L1TauAnalyzerRates/l1TauIsoVLoose_pt_eta2p4", l1PtPath, rootFileDirectory);
-  TH1F* tauNoBDT2p4 = calculateRates("L1TauAnalyzerRates/l1Tau_pt_eta2p4", l1PtPath, rootFileDirectory);
+  TH1F* tauTight2p4 = calculateRates("L1JetsAnalyzerRates/Tight", l1PtPath, rootFileDirectory);
+  TH1F* tauMedium2p4 = calculateRates("L1JetsAnalyzerRates/Medium", l1PtPath, rootFileDirectory);
+  TH1F* tauLoose2p4 = calculateRates("L1JetsAnalyzerRates/Loose", l1PtPath, rootFileDirectory);
+  TH1F* tauVLoose2p4 = calculateRates("L1JetsAnalyzerRates/VLoose", l1PtPath, rootFileDirectory);
+  TH1F* tauNoBDT2p4 = calculateRates("L1JetsAnalyzerRates", l1PtPath, rootFileDirectory);
   
   plotFiveRates(
 		tauNoBDT2p4, "L1 Reconstruction", kPink+7,
@@ -120,8 +121,9 @@ void makeRatesPlot(void)
                 "DiTau Rate, Barrel",
 		"rates-DiTau-PF_200PU_deltaZ5cm_barrel.png",
 		"plots/");
-}
 
+#endif 
+}
 /*********************************************************************/
 
 /* Plot five histograms with rates, with the labels h1Label and line
@@ -167,15 +169,15 @@ void plotFiveRates(TH1F* h1, TString h1Label, int c1,
   h5->SetLineColor(c5);
 
   /* Set x-axis limits */
-  h1->Draw("");
-  h2->Draw("SAME");
-  h3->Draw("SAME");
-  h4->Draw("SAME");
-  h5->Draw("SAME");
+  h1->Draw("hist");
+  h2->Draw("hist same");
+  h3->Draw("hist same");
+  h4->Draw("hist same");
+  h5->Draw("hist same");
 
   h1->GetXaxis()->SetRangeUser(xMin, xMax);
   h1->GetYaxis()->SetRangeUser(yMin, yMax);
-  h1->GetXaxis()->SetTitle("Level-1 #tau_{H} p_{T} [GeV]");
+  h1->GetXaxis()->SetTitle("Level-1 jet p_{T} [GeV]");
   h1->GetYaxis()->SetTitle("Rate [kHz]");
   h1->GetXaxis()->SetTitleSize(0.06); // default is 0.03                                                                                                        
   h1->GetYaxis()->SetTitleSize(0.06);
@@ -204,11 +206,7 @@ void plotFiveRates(TH1F* h1, TString h1Label, int c1,
 
 /* Plots Hist. */
 
-void plotHists(TH1F* h1, TString h1Label,
-               TH1F* h2, TString h2Label,
-               TH1F* h3, TString h3Label,
-	       TString filename,
-	       TString outputDir)
+void plotHists(TH1F* h1, TString h1Label, TH1F* h2, TString h2Label, TH1F* h3, TString h3Label, TH1F* h4, TString h4Label, TH1F* h5, TString h5Label)
 {
   /*******************************************************/
   /* plotting                                            */
@@ -235,14 +233,24 @@ void plotHists(TH1F* h1, TString h1Label,
   h3->SetLineWidth(2);
   h3->SetLineColor(kOrange+7);
 
+  h4->SetMarkerColor(kPink+7);
+  h4->SetLineWidth(2);
+  h4->SetLineColor(kPink+7);
+
+  h5->SetMarkerColor(kTeal-8);
+  h5->SetLineWidth(2);
+  h5->SetLineColor(kTeal-8);
+
   /* Set x-axis limits */
-  h1->GetXaxis()->SetRangeUser(0.0, 90.0);
+  h1->GetXaxis()->SetRangeUser(0.0, 300.0);
   
   h1->Draw("");
-  h2->Draw("SAME");
-  h3->Draw("SAME");  
+  h2->Draw("hist same");
+  h3->Draw("hist same");  
+  h4->Draw("hist same");
+  h5->Draw("hist same");
 
-  h1->GetXaxis()->SetTitle("L1 Tau p_{T} [GeV]");
+  h1->GetXaxis()->SetTitle("L1 jet p_{T} [GeV]");
   h1->GetYaxis()->SetTitle("Rate [Hz]");
   h1->GetXaxis()->SetTitleSize(0.06); // default is 0.03  
   h1->GetYaxis()->SetTitleSize(0.06);
@@ -251,16 +259,17 @@ void plotHists(TH1F* h1, TString h1Label,
   Tcan->SetLogy();
 
   /* Customize legend */
-  leg->SetHeader("Phase 2 L1 Taus");
+  leg->SetHeader("jet pt");
   leg->AddEntry(h1, h1Label, "l");
   leg->AddEntry(h2, h2Label, "l");
   leg->AddEntry(h3, h3Label, "l");
-
+  leg->AddEntry(h4, h4Label, "l");
+  leg->AddEntry(h5, h5Label, "l");
   gStyle->SetLegendFont(20);
   leg->Draw();
 
   Tcan->cd();
-  Tcan->SaveAs(outputDir+filename);
+  Tcan->SaveAs("hists_check.png");
 
 }
 
