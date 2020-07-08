@@ -113,13 +113,17 @@ TH1F* calculateRates(TString isoHistPath,
   double nEvents = getEvents(rootFileDirectory, "l1NtupleProducer/Stage3Regions");
   std::cout << "nEvents: " << nEvents <<std::endl;
   /* Convert each bin to a fraction of total events. */
-  float firstBin = ratesHist->GetBinContent(1);
+  double firstBin = ratesHist->GetBinContent(1);
   std::cout << "total entries: " << firstBin <<std::endl;
-  ratesHist->Scale((double) 1.00 / firstBin);
+  //ratesHist->Scale((double) 1.00 / firstBin);
   //ratesHist->Scale((double) 1.00 / nEvents);
   /* kHz */
-  ratesHist->Scale(40.0 * 100000.0 / 1000.0);
-
+  //ratesHist->Scale((firstBin/nEvents) * 80.0 * 10000.0 / 1000.0*1.4);
+  ratesHist->Scale((double) (1.0/120023.0));
+  ratesHist->Scale( 40.0 * 1000000.0/ 1000.0);
+  std::cout << "scale: " << (firstBin/nEvents) * 40.0 * 1000000.0/ 1000.0 <<std::endl;
+  float firstBin_afterscale = ratesHist->GetBinContent(1);
+  std::cout << "starting rate after scale: " << firstBin_afterscale <<std::endl;
   return ratesHist;
 }
 

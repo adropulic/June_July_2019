@@ -33,7 +33,7 @@ void makeRatesPlot(void)
   gROOT->ProcessLine(".L calculateRates.C");
 
   /* Specify paths/directories for input files. */
-  TString rootFileDirectory = "/afs/cern.ch/user/a/addropul/CMSSW_10_6_0_pre4/src/L1Trigger/Run3Ntuplizer/test/l1TNtuple-ZeroBias-060320_restrictedeta.root";
+  TString rootFileDirectory = "/afs/cern.ch/user/a/addropul/CMSSW_10_6_0_pre4/src/L1Trigger/Run3Ntuplizer/test/l1TNtuple-ZeroBias-062820_restrictedeta3p2.root";
   //going to use ZeroBias here instead 
   TString outputDirectory = "/afs/cern.ch/user/a/addropul/CMSSW_10_6_0_pre4/src/L1Trigger/Run3Ntuplizer/test/June_July_2019/rates_plots/plots";
   //TString rootFileDirectoryAll = "/afs/cern.ch/user/a/addropul/CMSSW_10_6_0_pre4/src/L1Trigger/Run3Ntuplizer/test/histograms_bdt.root";
@@ -44,23 +44,23 @@ void makeRatesPlot(void)
   //going to have to change 1 --> 2 for subleading jet
   /* Tau rates full detector */
   //TString l1PtPath = "h_l1Pt_1_zb";
-  TString l1PtPath = "l1NtupleProducer/Stage3Regions/l1pt_all_1";
-  TH1F* vbfjetsMedium = calculateRates("l1NtupleProducer/Stage3Regions/l1pt_medium_1", l1PtPath, rootFileDirectory);
-  TH1F* vbfjetsTight  = calculateRates("l1NtupleProducer/Stage3Regions/l1pt_tight_1",  l1PtPath, rootFileDirectory);
-  TH1F* vbfjetsLoose  = calculateRates("l1NtupleProducer/Stage3Regions/l1pt_loose_1",  l1PtPath, rootFileDirectory);
-  TH1F* vbfjetsVLoose = calculateRates("l1NtupleProducer/Stage3Regions/l1pt_veryloose_1", l1PtPath, rootFileDirectory);
+  TString l1PtPath = "l1NtupleProducer/Stage3Regions/l1pt_all_2";
+  TH1F* vbfjetsMedium = calculateRates("l1NtupleProducer/Stage3Regions/l1pt_medium_2", l1PtPath, rootFileDirectory);
+  TH1F* vbfjetsTight  = calculateRates("l1NtupleProducer/Stage3Regions/l1pt_tight_2",  l1PtPath, rootFileDirectory);
+  TH1F* vbfjetsLoose  = calculateRates("l1NtupleProducer/Stage3Regions/l1pt_loose_2",  l1PtPath, rootFileDirectory);
+  TH1F* vbfjetsVLoose = calculateRates("l1NtupleProducer/Stage3Regions/l1pt_veryloose_2", l1PtPath, rootFileDirectory);
   TH1F* vbfjetsNoBDT  = calculateRates(l1PtPath,l1PtPath,rootFileDirectory);
 
   plotFiveRates(
 		vbfjetsNoBDT, "L1 Reconstruction", kPink+7,
-		vbfjetsVLoose, "Very Loose (bdtDiscriminant > -.353)", kTeal-8,
-		vbfjetsLoose, "Loose (bdtDiscriminant > -.308)", kTeal-6,
-		vbfjetsMedium, "Medium (bdtDiscriminant > -.183)", kAzure-9,
-		vbfjetsTight, "Tight (bdtDiscriminant > -.003)", kAzure+2,
+		vbfjetsVLoose, "Very Loose (bdtDiscriminant > -.100)", kTeal-8,
+		vbfjetsLoose, "Loose (bdtDiscriminant > -.027)", kTeal-6,
+		vbfjetsMedium, "Medium (bdtDiscriminant > -.003)", kAzure-9,
+		vbfjetsTight, "Tight (bdtDiscriminant > .100)", kAzure+2,
 		0.0, 300.0,
 		10.0, 130000,
-		"Zero Bias Rate Leading Jet",
-		"rates_fullDetector_leading_scalednevents_reta_gentest.png",
+		"Zero Bias Rate Subleading Jet",
+		"rates_fullDetector_subleading_scalednevents_reta3p2_recotest.png",
 		"plots/");
 
 #if 0
