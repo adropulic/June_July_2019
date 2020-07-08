@@ -33,7 +33,7 @@ void makeRatesPlot(void)
   gROOT->ProcessLine(".L calculateRates.C");
 
   /* Specify paths/directories for input files. */
-  TString rootFileDirectory = "/afs/cern.ch/user/a/addropul/CMSSW_10_6_0_pre4/src/L1Trigger/Run3Ntuplizer/test/l1TNtuple-ZeroBias-062820_restrictedeta3p2.root";
+  TString rootFileDirectory = "/afs/cern.ch/work/a/addropul/l1TNtuple-ZeroBias-070520_newmatch.root";
   //going to use ZeroBias here instead 
   TString outputDirectory = "/afs/cern.ch/user/a/addropul/CMSSW_10_6_0_pre4/src/L1Trigger/Run3Ntuplizer/test/June_July_2019/rates_plots/plots";
   //TString rootFileDirectoryAll = "/afs/cern.ch/user/a/addropul/CMSSW_10_6_0_pre4/src/L1Trigger/Run3Ntuplizer/test/histograms_bdt.root";
@@ -60,7 +60,7 @@ void makeRatesPlot(void)
 		0.0, 300.0,
 		10.0, 130000,
 		"Zero Bias Rate Subleading Jet",
-		"rates_fullDetector_subleading_scalednevents_reta3p2_recotest.png",
+		"rates_fullDetector_subleading_scalednevents_recotest.png",
 		"plots/");
 
 #if 0
