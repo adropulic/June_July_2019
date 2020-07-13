@@ -119,8 +119,8 @@ TH1F* calculateRates(TString isoHistPath,
   //ratesHist->Scale((double) 1.00 / nEvents);
   /* kHz */
   //scaling to the fraction of total entries passing L1 (not the same as nEvents in this code)
-  ratesHist->Scale((double) (1.0/253578.0));
-  ratesHist->Scale( 40.0 * 1000000.0/ 1000.0);
+  ratesHist->Scale((double) (1.0/firstBin));
+  ratesHist->Scale((nPass/nEvents) * 40.0 * 1000000.0/ 1000.0);
   std::cout << "scale: " << (firstBin/nEvents) * 40.0 * 1000000.0/ 1000.0 <<std::endl;
   float firstBin_afterscale = ratesHist->GetBinContent(1);
   std::cout << "starting rate after scale: " << firstBin_afterscale <<std::endl;
