@@ -110,6 +110,8 @@ TH1F* calculateRates(TString isoHistPath,
 
   /* Calculate (# of all events passing the BDT) / (# all events) */
   double nPass = isoHist->GetEntries();
+  TTree* tree  =(TTree*) file->Get("l1NtupleProducer/Stage3Regions/efficiencyTree");
+  
   double nEvents = getEvents(rootFileDirectory, "l1NtupleProducer/Stage3Regions");
   std::cout << "nEvents: " << nEvents <<std::endl;
   /* Convert each bin to a fraction of total events. */

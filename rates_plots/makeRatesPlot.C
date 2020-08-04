@@ -18,7 +18,7 @@ void plotFiveRates(TH1F* h1, TString h1Label, int c1,
 		   TH1F* h3, TString h3Label, int c3,
 		   TH1F* h4, TString h4Label, int c4,
 		   TH1F* h5, TString h5Label, int c5,
-		   TH1F* h6, TString h6Label, int c6,
+		  // TH1F* h6, TString h6Label, int c6,
 		   float xMin, float xMax,
 		   float yMin, float yMax,
 		   TString legendTitle,
@@ -34,10 +34,11 @@ void makeRatesPlot(void)
   gROOT->ProcessLine(".L calculateRates.C");
 
   /* Specify paths/directories for input files. */
-  TString rootFileDirectory = "/afs/cern.ch/work/a/addropul/l1TNtuple-ZeroBias-070520_newmatch.root";
+  //TString rootFileDirectory = "/afs/cern.ch/work/a/addropul/l1TNtuple-ZeroBias-070520_newmatch.root";
   //going to use ZeroBias here instead 
+  TString rootFileDirectory = "/afs/cern.ch/work/a/addropul/l1TNtuple-ZeroBias-080220_norecomatch_manybdtstest.root";
   TString outputDirectory = "/afs/cern.ch/user/a/addropul/CMSSW_10_6_0_pre4/src/L1Trigger/Run3Ntuplizer/test/June_July_2019/rates_plots/plots";
-  TString rootFileDirectoryAll = "/afs/cern.ch/work/a/addropul/l1TNtuple-ZeroBias-071220_norecomatch.root";
+ // TString rootFileDirectoryAll = "/afs/cern.ch/work/a/addropul/l1TNtuple-ZeroBias-071620.root";
 
   /*******************************************************/
   /* Rates as a function of l1Pt                         */
@@ -45,24 +46,24 @@ void makeRatesPlot(void)
   //going to have to change 1 --> 2 for subleading jet
   /* Tau rates full detector */
   //TString l1PtPath = "h_l1Pt_1_zb";
-  TString l1PtPath = "l1NtupleProducer/Stage3Regions/l1pt_all_2";
-  TH1F* vbfjetsMedium = calculateRates("l1NtupleProducer/Stage3Regions/l1pt_medium_2", l1PtPath, rootFileDirectory);
-  TH1F* vbfjetsTight  = calculateRates("l1NtupleProducer/Stage3Regions/l1pt_tight_2",  l1PtPath, rootFileDirectory);
-  TH1F* vbfjetsLoose  = calculateRates("l1NtupleProducer/Stage3Regions/l1pt_loose_2",  l1PtPath, rootFileDirectory);
-  TH1F* vbfjetsVLoose = calculateRates("l1NtupleProducer/Stage3Regions/l1pt_veryloose_2", l1PtPath, rootFileDirectory);
+  TString l1PtPath = "l1NtupleProducer/Stage3Regions/l1pt_all_1";
+  TH1F* vbfjetsMedium = calculateRates("l1NtupleProducer/Stage3Regions/l1pt_tight_1_2", l1PtPath, rootFileDirectory);
+  TH1F* vbfjetsTight  = calculateRates("l1NtupleProducer/Stage3Regions/l1pt_tight_1_10",  l1PtPath, rootFileDirectory);
+  TH1F* vbfjetsLoose  = calculateRates("l1NtupleProducer/Stage3Regions/l1pt_tight_1_25",  l1PtPath, rootFileDirectory);
+  TH1F* vbfjetsVLoose = calculateRates("l1NtupleProducer/Stage3Regions/l1pt_tight_1", l1PtPath, rootFileDirectory);
   TH1F* vbfjetsNoBDT  = calculateRates(l1PtPath,l1PtPath,rootFileDirectory);
-  TH1F* norecomatch   = calculateRates(l1PtPath, l1PtPath, rootFileDirectoryAll);
+  //TH1F* norecomatch   = calculateRates(l1PtPath, l1PtPath, rootFileDirectoryAll);
   plotFiveRates(
-		norecomatch, "L1 Reconstruction, no reco match", kOrange-3,
-		vbfjetsNoBDT, "L1 Reconstruction", kPink+7,
-		vbfjetsVLoose, "Very Loose (bdtDiscriminant > -.100)", kTeal-8,
-		vbfjetsLoose, "Loose (bdtDiscriminant > -.027)", kTeal-6,
-		vbfjetsMedium, "Medium (bdtDiscriminant > -.003)", kAzure-9,
-		vbfjetsTight, "Tight (bdtDiscriminant > .100)", kAzure+2,
+		//norecomatch, "L1 Reconstruction, no reco match", kOrange-3,
+		vbfjetsNoBDT, "L1 Reconstruction no reco match", kPink+7,
+		vbfjetsVLoose, "Tight (bdtDiscriminant > 0.00), 50 trees", kTeal-8,
+		vbfjetsLoose, "Tight , 25 trees", kTeal-6,
+		vbfjetsMedium, "Tight, 10 trees", kAzure-9,
+		vbfjetsTight, "Tight, 2 trees", kAzure+2,
 		0.0, 300.0,
 		10.0, 130000,
-		"Zero Bias Rate Subleading Jet",
-		"rates_fullDetector_subleading_scalednevents_recotest.png",
+		"Zero Bias Rate Leading Jet",
+		"rates_fullDetector_leading_norecomatch_difftrees_tight.png",
 		"plots/");
 
 #if 0
@@ -137,7 +138,7 @@ void plotFiveRates(TH1F* h1, TString h1Label, int c1,
 		   TH1F* h3, TString h3Label, int c3,
 		   TH1F* h4, TString h4Label, int c4,
 		   TH1F* h5, TString h5Label, int c5,
-		   TH1F* h6, TString h6Label, int c6,
+//		   TH1F* h6, TString h6Label, int c6,
 		   float xMin, float xMax,
 		   float yMin, float yMax,
 		   TString legendTitle,
@@ -171,8 +172,8 @@ void plotFiveRates(TH1F* h1, TString h1Label, int c1,
   h5->SetLineWidth(3);
   h5->SetLineColor(c5);
 
-  h6->SetLineWidth(3);
-  h6->SetLineColor(c6);
+  //h6->SetLineWidth(3);
+  //h6->SetLineColor(c6);
 
   /* Set x-axis limits */
   h1->Draw("hist");
@@ -180,7 +181,7 @@ void plotFiveRates(TH1F* h1, TString h1Label, int c1,
   h3->Draw("hist same");
   h4->Draw("hist same");
   h5->Draw("hist same");
-  h6->Draw("hist same");
+  //h6->Draw("hist same");
 
   h1->GetXaxis()->SetRangeUser(xMin, xMax);
   h1->GetYaxis()->SetRangeUser(yMin, yMax);
@@ -199,7 +200,7 @@ void plotFiveRates(TH1F* h1, TString h1Label, int c1,
   leg->AddEntry(h3, h3Label, "l");
   leg->AddEntry(h4, h4Label, "l");
   leg->AddEntry(h5, h5Label, "l");
-  leg->AddEntry(h6, h6Label, "l");
+  //leg->AddEntry(h6, h6Label, "l");
 
   gStyle->SetLegendFont(20);
   leg->Draw();
